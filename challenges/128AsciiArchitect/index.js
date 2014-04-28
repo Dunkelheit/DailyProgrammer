@@ -30,6 +30,7 @@ function buildDictionary() {
 }
 
 function translateBlocks(block) {
+    // TODO: NOPE! buildDictionary() is called every time
     return buildDictionary().then(function(dictionary) {
         return block.length === 2 ? _lshift(dictionary[block[1]], parseInt(block[0], 10)) : dictionary[block[0]];
     });
