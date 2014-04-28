@@ -2,17 +2,10 @@
 
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require("fs"));
-var _ = require('underscore');
+var _ = require('underscore.string');
 
-String.prototype.repeat = function(count) {
-    if (count < 1) return '';
-    var result = '', pattern = this.valueOf();
-    while (count > 0) {
-        if (count & 1) result += pattern;
-        count >>= 1, pattern += pattern;
-    }
-    return result;
-};
+var line = '++--***···';
+var lineLength = line.length;
 
 var blockDictionary = {
     a: '+         ',
@@ -32,16 +25,10 @@ function parseBlocks(map) {
 }
 
 function blocksToLines(item) {
-    var blockName;
-    var padding;
     if (item.length === 2) {
-        padding = item[0];
-        blockName = item[1];
-        var response = ' '.repeat(padding) + blockDictionary[blockName];
-        return response.substr(0, response.length - padding);
+        return _.pad(blockDictionary[item[1]], lineLength + parseInt(item[0], 10));
     } else {
-        blockName = item[0];
-        return blockDictionary[blockName];
+        return blockDictionary[item[0]];
     }
 }
 

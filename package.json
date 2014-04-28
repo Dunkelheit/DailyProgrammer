@@ -19,6 +19,7 @@
   "dependencies": {
     "async": "^0.7.0",
     "underscore": "^1.6.0",
-    "bluebird": "^1.2.4"
+    "bluebird": "^1.2.4",
+    "underscore.string": "^2.3.3"
   }
 }
