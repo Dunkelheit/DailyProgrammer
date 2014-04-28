@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Dunkelheit/DailyProgrammer/issues"
   },
-  "homepage": "https://github.com/Dunkelheit/DailyProgrammer"
+  "homepage": "https://github.com/Dunkelheit/DailyProgrammer",
+  "dependencies": {
+    "async": "^0.7.0",
+    "underscore": "^1.6.0",
+    "bluebird": "^1.2.4"
+  }
 }
