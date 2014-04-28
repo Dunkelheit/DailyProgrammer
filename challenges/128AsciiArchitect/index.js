@@ -5,21 +5,13 @@ var fs = Promise.promisifyAll(require("fs"));
 var _ = require('underscore.string');
 
 var line = '++--***···';
-var lineLength = line.length;
 
-var blockDictionary = {};
+function lshift(str, amount) {
+    return _.pad(str.slice(0, str.length - amount), str.length);
+}
 
 function rshift(str, amount) {
     return _.rpad(str.slice(0, amount), str.length);
-}
-
-function buildDictionary() {
-    return Promise.reduce(_.chars('abcdefghij'), function (result, char, index) {
-        result[char] = rshift(line, index);
-        return result;
-    }, {}).then(function (dictionary) {
-        blockDictionary = dictionary;
-    });
 }
 
 function readFile() {
@@ -30,12 +22,21 @@ function parseBlocks(map) {
     return map.match(/[1-9]*[a-j]/gi);
 }
 
+function buildDictionary() {
+    return Promise.reduce(_.chars('abcdefghij'), function (result, char, index) {
+        result[char] = rshift(line, index);
+        return result;
+    }, {});
+}
+
 function blocksToLines(item) {
-    if (item.length === 2) {
-        return _.pad(blockDictionary[item[1]], lineLength + parseInt(item[0], 10));
-    } else {
-        return blockDictionary[item[0]];
-    }
+    return buildDictionary().then(function(dictionary) {
+        if (item.length === 2) {
+            return lshift(dictionary[item[1]], parseInt(item[0], 10));
+        } else {
+            return dictionary[item[0]];
+        }
+    });
 }
 
 function rotateLines(data) {
@@ -51,14 +52,12 @@ function rotateLines(data) {
     return result;
 }
 
-function linesToString(data) {
-    return data.join('\n');
+function display(lines) {
+    console.log(lines.join('\n'));
 }
 
-buildDictionary()
-    .then(readFile)
+readFile()
     .then(parseBlocks)
     .map(blocksToLines)
     .then(rotateLines)
-    .then(linesToString)
-    .then(console.log);
+    .then(display);
