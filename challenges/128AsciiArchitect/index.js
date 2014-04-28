@@ -7,18 +7,11 @@ var _ = require('underscore.string');
 var line = '++--***···';
 var lineLength = line.length;
 
-var blockDictionary = {
-    a: '+         ',
-    b: '++        ',
-    c: '++-       ',
-    d: '++--      ',
-    e: '++--*     ',
-    f: '++--**    ',
-    g: '++--***   ',
-    h: '++--***·  ',
-    i: '++--***·· ',
-    j: '++--***···'
-};
+var blockDictionary = {};
+
+function rshift(str, amount) {
+    return _.rpad(str.slice(0, amount), str.length);
+}
 
 function parseBlocks(map) {
     return map.match(/[1-9]*[a-j]/gi);
@@ -49,7 +42,15 @@ function linesToString(data) {
     return data.join('\n');
 }
 
-fs.readFileAsync('input.txt', 'utf8')
+Promise.reduce(_.chars('abcdefghij'), function (result, char, index) {
+    result[char] = rshift(line, index);
+    return result;
+}, {})
+    .then(function (dictionary) {
+        blockDictionary = dictionary;
+    }).then(function() {
+        return fs.readFileAsync('input.txt', 'utf8')
+    })
     .then(parseBlocks)
     .map(blocksToLines)
     .then(rotateLines)
