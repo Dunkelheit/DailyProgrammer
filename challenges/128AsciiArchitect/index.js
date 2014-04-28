@@ -6,14 +6,13 @@ var _ = require('underscore.string');
 
 var line = '++--***···';
 
-require('underscore').extend(_, {
-    lshift: function (str, padding) {
-        return _.pad(str.slice(0, str.length - padding), str.length);
-    },
-    rshift: function (str, padding) {
-        return _.rpad(str.slice(0, padding), str.length);
-    }
-});
+function _lshift (str, padding) {
+    return _.pad(str.slice(0, str.length - padding), str.length);
+}
+
+function _rshift(str, padding) {
+    return _.rpad(str.slice(0, padding), str.length);
+}
 
 function readFile() {
     return fs.readFileAsync('input.txt', 'utf8')
@@ -25,7 +24,7 @@ function parseBlocks(map) {
 
 function buildDictionary() {
     return Promise.reduce(_.chars('abcdefghij'), function (result, char, index) {
-        result[char] = _.rshift(line, index);
+        result[char] = _rshift(line, index);
         return result;
     }, {});
 }
@@ -33,7 +32,7 @@ function buildDictionary() {
 function blocksToLines(item) {
     return buildDictionary().then(function(dictionary) {
         if (item.length === 2) {
-            return _.lshift(dictionary[item[1]], parseInt(item[0], 10));
+            return _lshift(dictionary[item[1]], parseInt(item[0], 10));
         } else {
             return dictionary[item[0]];
         }
