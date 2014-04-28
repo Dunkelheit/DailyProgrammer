@@ -14,7 +14,7 @@ function _rshift(str, padding) {
     return _.rpad(str.slice(0, padding), str.length);
 }
 
-function readFile() {
+function readMap() {
     return fs.readFileAsync('input.txt', 'utf8')
 }
 
@@ -29,35 +29,31 @@ function buildDictionary() {
     }, {});
 }
 
-function blocksToLines(item) {
+function translateBlocks(block) {
     return buildDictionary().then(function(dictionary) {
-        if (item.length === 2) {
-            return _lshift(dictionary[item[1]], parseInt(item[0], 10));
-        } else {
-            return dictionary[item[0]];
-        }
+        return block.length === 2 ? _lshift(dictionary[block[1]], parseInt(block[0], 10)) : dictionary[block[0]];
     });
 }
 
-function rotateLines(data) {
-    var result = [];
-    var height = data[0].length;
+function rotateLines(lines) {
+    var rotatedLines = [];
+    var height = line.length;
     while (height--) {
-        var line = '';
-        for (var i = 0; i < data.length; i++) {
-            line += data[i][height];
+        var rotatedLine = '';
+        for (var i = 0; i < lines.length; i++) {
+            rotatedLine += lines[i][height];
         }
-        result.push(line);
+        rotatedLines.push(rotatedLine);
     }
-    return result;
+    return rotatedLines;
 }
 
 function display(lines) {
     console.log(lines.join('\n'));
 }
 
-readFile()
+readMap()
     .then(parseBlocks)
-    .map(blocksToLines)
+    .map(translateBlocks)
     .then(rotateLines)
     .then(display);
