@@ -1,0 +1,19 @@
+{
+  "name": "DailyProgrammer",
+  "version": "0.0.0",
+  "description": "Challenges from /r/dailyprogrammer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dunkelheit/DailyProgrammer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dunkelheit/DailyProgrammer/issues"
+  },
+  "homepage": "https://github.com/Dunkelheit/DailyProgrammer"
+}
