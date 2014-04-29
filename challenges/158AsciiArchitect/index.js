@@ -1,3 +1,6 @@
+/**
+ * http://www.reddit.com/r/dailyprogrammer/comments/236va2/4162014_challenge_158_intermediate_part_1_the/
+ */
 'use strict';
 
 var Promise = require('bluebird');
