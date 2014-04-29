@@ -31,17 +31,14 @@ return fs.readFileAsync('input.txt', 'utf8')
             });
     })
     .then(function rotateLines(lines) {
-        var rotatedLines = [];
-        var height = line.length;
-        while (height--) {
-            var rotatedLine = '';
-            for (var i = 0; i < lines.length; i++) {
-                rotatedLine += lines[i][height];
+        var rotatedLines = '';
+        for (var i = 0, h = line.length - 1; h >= 0; i++) {
+            rotatedLines += lines[i % lines.length][h];
+            if ((i + 1) % lines.length === 0) {
+                rotatedLines += '\n';
+                h--;
             }
-            rotatedLines.push(rotatedLine);
         }
-        return rotatedLines;
+        return rotatedLines
     })
-    .then(function display(lines) {
-        console.log(lines.join('\n'));
-    });
+    .then(console.log);
