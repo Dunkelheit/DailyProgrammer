@@ -14,47 +14,34 @@ function _rshift(str, padding) {
     return _.rpad(str.slice(0, padding), str.length);
 }
 
-function readMap() {
-    return fs.readFileAsync('input.txt', 'utf8')
-}
-
-function parseBlocks(map) {
-    return map.match(/[1-9]*[a-j]/gi);
-}
-
-function buildDictionary() {
-    return Promise.reduce(_.chars('abcdefghij'), function (result, char, index) {
-        result[char] = _rshift(line, index);
-        return result;
-    }, {});
-}
-
-function translateBlocks(block) {
-    // TODO: NOPE! buildDictionary() is called every time
-    return buildDictionary().then(function(dictionary) {
-        return block.length === 2 ? _lshift(dictionary[block[1]], parseInt(block[0], 10)) : dictionary[block[0]];
-    });
-}
-
-function rotateLines(lines) {
-    var rotatedLines = [];
-    var height = line.length;
-    while (height--) {
-        var rotatedLine = '';
-        for (var i = 0; i < lines.length; i++) {
-            rotatedLine += lines[i][height];
+return fs.readFileAsync('input.txt', 'utf8')
+    .then(function (map) {
+        return map.match(/[1-9]*[a-j]/gi);
+    })
+    .then(function (blocks) {
+        return Promise
+            .reduce(_.chars('abcdefghij'), function (result, char, index) {
+                result[char] = _rshift(line, index);
+                return result;
+            }, {})
+            .then(function (dictionary) {
+                return Promise.map(blocks, function (block) {
+                    return block.length === 2 ? _lshift(dictionary[block[1]], parseInt(block[0], 10)) : dictionary[block[0]];
+                })
+            });
+    })
+    .then(function (lines) {
+        var rotatedLines = [];
+        var height = line.length;
+        while (height--) {
+            var rotatedLine = '';
+            for (var i = 0; i < lines.length; i++) {
+                rotatedLine += lines[i][height];
+            }
+            rotatedLines.push(rotatedLine);
         }
-        rotatedLines.push(rotatedLine);
-    }
-    return rotatedLines;
-}
-
-function display(lines) {
-    console.log(lines.join('\n'));
-}
-
-readMap()
-    .then(parseBlocks)
-    .map(translateBlocks)
-    .then(rotateLines)
-    .then(display);
+        return rotatedLines;
+    })
+    .then(function (lines) {
+        console.log(lines.join('\n'));
+    });
