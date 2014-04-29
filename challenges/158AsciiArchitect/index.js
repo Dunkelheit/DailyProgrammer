@@ -33,7 +33,6 @@ return fs.readFileAsync('input.txt', 'utf8')
             });
     })
     .then(function rotateLines(lines) {
-        console.log(lines);
         var rotatedLines = '';
         for (var i = 0, h = line.length - 1; h >= 0; i++) {
             rotatedLines += lines[i % lines.length][h];
@@ -42,6 +41,6 @@ return fs.readFileAsync('input.txt', 'utf8')
                 h--;
             }
         }
-        return rotatedLines
+        return rotatedLines;
     })
     .then(console.log);
