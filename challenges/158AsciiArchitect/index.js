@@ -5,16 +5,15 @@
 
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require("fs"));
-var _ = require('underscore.string');
 
 var line = '++--***···';
 
 function _lshift (str, padding) {
-    return _.pad(str.slice(0, str.length - padding), str.length);
+    return new Array(padding + 1).join(' ') + str.substr(0, str.length - padding);
 }
 
 function _rshift(str, padding) {
-    return _.rpad(str.slice(0, padding), str.length);
+    return str.substr(padding) + new Array(padding + 1).join(' ');
 }
 
 return fs.readFileAsync('input.txt', 'utf8')
@@ -23,8 +22,8 @@ return fs.readFileAsync('input.txt', 'utf8')
     })
     .then(function buildAndTranslateBlocks(blocks) {
         return Promise
-            .reduce(_.chars('abcdefghij'), function buildDictionary(result, char, index) {
-                result[char] = _rshift(line, index);
+            .reduce('abcdefghij'.split(''), function buildDictionary(result, char, index) {
+                result[char] = _rshift(line, line.length - index);
                 return result;
             }, {})
             .then(function (dictionary) {
@@ -34,6 +33,7 @@ return fs.readFileAsync('input.txt', 'utf8')
             });
     })
     .then(function rotateLines(lines) {
+        console.log(lines);
         var rotatedLines = '';
         for (var i = 0, h = line.length - 1; h >= 0; i++) {
             rotatedLines += lines[i % lines.length][h];
