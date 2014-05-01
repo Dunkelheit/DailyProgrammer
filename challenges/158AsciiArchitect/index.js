@@ -23,7 +23,7 @@ return fs.readFileAsync('input.txt', 'utf8')
     .then(function buildAndTranslateBlocks(blocks) {
         return Promise
             .reduce('abcdefghij'.split(''), function buildDictionary(result, char, index) {
-                result[char] = _rshift(line, line.length - index);
+                result[char] = _rshift(line, line.length - 1 - index);
                 return result;
             }, {})
             .then(function (dictionary) {
