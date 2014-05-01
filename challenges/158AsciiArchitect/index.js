@@ -12,10 +12,6 @@ function _lshift (str, padding) {
     return new Array(padding + 1).join(' ') + str.substr(0, str.length - padding);
 }
 
-function _rshift(str, padding) {
-    return str.substr(padding) + new Array(padding + 1).join(' ');
-}
-
 return fs.readFileAsync('input.txt', 'utf8')
     .then(function parseBlocks(map) {
         return map.match(/[1-9]*[a-j]/gi);
@@ -23,7 +19,7 @@ return fs.readFileAsync('input.txt', 'utf8')
     .then(function buildAndTranslateBlocks(blocks) {
         return Promise
             .reduce('abcdefghij'.split(''), function buildDictionary(result, char, index) {
-                result[char] = _rshift(line, line.length - 1 - index);
+                result[char] = line.substr(0, index + 1) + new Array(line.length - index).join(' ');
                 return result;
             }, {})
             .then(function (dictionary) {
@@ -33,6 +29,7 @@ return fs.readFileAsync('input.txt', 'utf8')
             });
     })
     .then(function rotateLines(lines) {
+        console.log(lines);
         var rotatedLines = '';
         for (var i = 0, h = line.length - 1; h >= 0; i++) {
             rotatedLines += lines[i % lines.length][h];
